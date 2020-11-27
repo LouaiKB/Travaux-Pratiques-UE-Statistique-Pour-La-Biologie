@@ -1,0 +1,79 @@
+---
+title: "TP3"
+author: "Louai KASSA BAGHDOUCHE"
+date: "23/11/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#1. Partie 1 
+on importe la table dans le fichier IMCenfants
+
+```{r}
+tab = read.table(file.choose(), header=TRUE, sep="\t", dec=",")
+tab
+```
+on trace l'histogramme d'effectif des tailles
+```{r}
+taille = tab$taille
+hist(taille, breaks=c(88, 90, 92, 94, 96, 98, 100, 102, 104, 106, 108, 110, 112), freq=TRUE)
+rug(taille)
+
+
+
+```
+
+On trace l'histogramme de fréquence
+```{r}
+hist(taille, breaks=c(88, 90, 92, 94, 96, 98, 100, 102, 104, 106, 108, 110, 112), freq=FALSE)
+rug(taille)
+curve(dnorm(x, mean(taille), sd(taille)), add=TRUE, col='red')
+```
+
+```{r}
+par(mfrow=c(3,3))
+hist(taille, freq=FALSE)
+curve(dnorm(x, mean(taille), sd(taille)), add=TRUE, col='red')
+for (i in 1:8) {
+  hist(rnorm(length(taille), mean(taille), sd(taille)), main = paste('histogramme ',i), xlab=paste('histogramme simulé de la loi normale', i), freq=FALSE)
+  curve(dnorm(x, mean(taille), sd(taille)), add=TRUE, col='red')
+}
+```
+à partir des histogrammes oui on peut dire que la distribution des données semble à une loi normale
+```{r}
+par(mfrow=c(2,2))
+hist(taille, freq=FALSE)
+curve(dbinom(x, 10, 0.2), add=TRUE, col='red')
+for (i in 1:3) {
+  hist(rbinom(length(taille), 10, 0.2), main=paste('histogramme ', i), xlab=paste('histogramme simulé de la loi binomiale', i), freq=FALSE)
+    curve(dbinom(x, 10, 0.2), add=TRUE, col='red')
+}
+```
+```{r}
+x=0:5;n=5;
+plot(x,dbinom(x,n,0.5),xlim=c(0,20),ylim=c(0,.40),type="h",lty=2,pch=n,cex=1,lwd=3,col=1,cex.axis=1.5,xlab="",ylab="");
+x=0:10;n=10;
+points(x,dbinom(x,n,0.5),type="h",pch=n,lty=3,cex=1,lwd=3,col=3)
+x=0:20;n=20;
+points(x,dbinom(x,n,0.5),type="h",lty=4,pch=n,cex=1,lwd=3,col=5)
+legtxt=c(expression(paste(italic(n),"=5")), expression(paste(italic(n)," =10")), expression(paste(italic(n)," =20")) )
+legend("topright",legtxt,title=expression(paste(italic(p),"=0.5")), lty=c(2,3,4),col=c(1,3,5),cex=1.5,bg="white")
+title("Loi binomiale de paramètre n et p=0.5")
+```
+
+```{r}
+x=0:5;
+plot(x,dunif(x, 0, 5),xlim=c(0,20),ylim=c(0,.40),type="h",lty=2,pch=n,cex=1,lwd=3,col=1,cex.axis=1.5,xlab="",ylab="");
+x=0:10;
+points(x,dunif(x, 0, 10),type="h",pch=n,lty=3,cex=1,lwd=3,col=3)
+x=0:20;
+points(x,dunif(x,0, 20),type="h",lty=4,pch=n,cex=1,lwd=3,col=5)
+legtxt=c(expression(paste(italic(x),"=[0,5]")), expression(paste(italic(x),"=[0,10]")), expression(paste(italic(x)," =[0,20]")) )
+legend("topright",legtxt, lty=c(2,3,4),col=c(1,3,5),cex=1.5,bg="white")
+title("Loi uniforme de paramètre [a, b]")
+
+```
+

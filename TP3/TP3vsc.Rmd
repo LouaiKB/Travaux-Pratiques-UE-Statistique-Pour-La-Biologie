@@ -1,0 +1,259 @@
+---
+title: "TP3"
+author: "Louai KASSA BAGHDOUCHE"
+date: "23/11/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# 1. PARTIE 1 
+1. on importe la table dans le fichier IMCenfants
+
+```{r}
+tab = read.table(file.choose(), header=TRUE, sep="\t", dec=",")
+tab
+```
+2. on trace l'histogramme d'effectif des tailles
+```{r}
+taille = tab$taille
+hist(taille, breaks=c(88, 90, 92, 94, 96, 98, 100, 102, 104, 106, 108, 110, 112), freq=TRUE)
+rug(taille)
+
+```
+
+3. On trace l'histogramme de fréquence
+```{r}
+hist(taille, breaks=c(88, 90, 92, 94, 96, 98, 100, 102, 104, 106, 108, 110, 112), freq=FALSE)
+rug(taille)
+curve(dnorm(x, mean(taille), sd(taille)), add=TRUE, col='red')
+```
+4. 
+```{r}
+par(mfrow=c(3,3))
+hist(taille, freq=FALSE)
+curve(dnorm(x, mean(taille), sd(taille)), add=TRUE, col='red')
+for (i in 1:8) {
+  hist(rnorm(length(taille), mean(taille), sd(taille)), main = paste('histogramme ',i), xlab=paste('histogramme simulé de la loi normale', i), freq=FALSE)
+  curve(dnorm(x, mean(taille), sd(taille)), add=TRUE, col='red')
+}
+```
+
+
+8.	Refaire les questions 1->4 en remplaçant « normale » par d’autres lois, mais avec seulement 4 graphiques en tout. par (mfrow=c(2,2)
+```{r}
+par(mfrow=c(2,2))
+hist(taille, main="Histogramme des fréquences des Tailles", freq = FALSE, col = 'Pink')
+
+#Loi du khi-carré dchisq(x, k= dl)
+curve(dchisq(x, 100), add=TRUE, col="Purple")
+for (i in 1:3){
+  hist(rchisq(length(taille), 100), freq = FALSE, main = paste("simulation aleatoire", i), col = 'lightYellow', xlab = NULL)
+  curve(dchisq(x, 100), add=TRUE, col="Purple")
+}
+```
+
+
+10.	Remplacer l’histogramme par un autre graphique : boxplot(), qqplot(), qqnorm et qqline().
+```{r}
+par(mfrow=c(2,2)) 
+boxplot(taille, col="Green", main="Boxplot des Tailles des enfants")
+K = (rchisq(length(taille), 100))
+qqplot(taille, K, main="QQ plot Taille vs Ki-deux")
+qqnorm(taille, main="QQ plot Taille vs Norm")
+qqline(taille, main="QQ line Taille")
+```
+
+
+11.	Revenir à un graphique par fenêtre avec la commande par(mfrow=c(1,1))
+
+```{r}
+mfrow=c(1,1)
+```
+12.	Calculer moyenne, variance, deciles, de la variable taille.
+```{r}
+mean(taille) #Calcul de moyenne
+```
+```{r}
+var(taille) #Calcul de variance
+```
+```{r}
+quantile(taille,seq(0,1,by=0.1),type=1) # Calcul de déciles
+
+```
+
+# PARTIE 2: Analyse des données 
+
+#### 1. Importation du fichier de jeux de données jeu3.txt
+```{r}
+tabjeu3 = read.table(file.choose(), header=TRUE, sep='\t', dec=',')
+tabjeu3
+```
+La liste des variables de ce jeu de données 
+```{r}
+names(tabjeu3)
+```
+#### 2. le mode des variables
+```{r}
+# création d'une fonction qui calcule le mode 
+getmode <- function(v) {
+    uniqv = unique(v)
+    uniqv[which.max(tabulate(match(v, uniqv)))]
+}
+# mode de la variable situation
+print(getmode(tabjeu3$situation))
+  
+# mode de la varaible taille
+print(getmode(tabjeu3$taille))
+
+# mode ded la variable chocol
+print(getmode(tabjeu3$chocol))
+```
+#### 3. le choix des classes pour la variable taille 
+```{r}
+# on va diviser les taille selon 4 classes;
+classDesTailles = cut(tab_jeu3$taille, 4)
+a = table(classDesTailles)
+a[a == max(a)]
+# maintenant on trouve la classe moodale
+sort(table(classDesTailles), decreasing=TRUE)[1]
+
+```
+#### 4. le calcul de la médiane 
+```{r}
+# la médiane de la variable situation 
+median(tabjeu3$situation)
+
+# la médiane de la variable chocol
+median(tabjeu3$chocol)
+```
+#### 5. le tri à plat
+```{r}
+# tri à plat de la variable chocol 
+plat.chocolat = table(tabjeu3$chocol); plat.chocolat
+
+# tri à plat de de la variable fruits_crus
+plat.fruit = table(tabjeu3$fruit_crus); plat.fruit
+```
+#### 6. récupération de la médiane des deux variables à partir du tri de la table
+```{r}
+index = sum(plat.chocolat/2)
+sorted = sort(tabjeu3$taille); sorted[index]
+
+index = sum(plat.fruit/2)
+sorted = sort(tabjeu3$fruit_crus); sorted[index]
+```
+#### 7. le calcul des quartiles 
+```{r}
+quantile(table(classDesTailles), na.rm=T,type=1)
+```
+#### 8. la polygone des fréquences cumulées 
+```{r}
+histo = hist(tab_jeu3$taille, freq=FALSE)
+plot(cumsum(histo$counts)/sum(histo$counts))
+```
+#### 9. le calcul de la moyenne des variables
+```{r}
+# la moyenne de la variable situation 
+mean(tabjeu3$situation)
+
+# la moyenne de la variable chocol
+mean(tabjeu3$chocol)
+
+# la moyenne de la varaible taille
+mean(tabjeu3$taille)
+```
+
+## PARTIE 3 . Analyse de données
+
+a)	A l’aide de la fonction str, préciser le type de variables présent dans ce jeu de données. 
+A l’aide de la page d’aide de mtcars, préciser s’il s’agit de variables numériques qualitatives, qualitatives ordonnées, quantitatives discrètes, ou quantitatives continues. 
+
+```{r}
+library(datasets);data(mtcars);
+str(mtcars)
+
+```
+Nous trouvons 11 variables numériques répertoriant des aspects des 32 automobiles comparées, nous allons trier les variables en trois groupes selon leur type :
+- variables qualitatives (non-ordonnées) : vs, am
+- variables quantitatives discrètes : cyl, gear, carb
+- variables quantitatives continues : mpg, disp, drat, wt, qsec
+
+
+b)	Vous trouverez dans la page d’aide de mtcars dans l’onglet « exemples », le script suivant :
+mtcars2 <- within(mtcars, {
+   vs <- factor(vs, labels = c("V", "S"))
+   am <- factor(am, labels = c("automatic", "manual"))
+   cyl  <- ordered(cyl)
+   gear <- ordered(gear)
+   carb <- ordered(carb)
+})
+
+Effectuer un summary(mtcars) ; summary(mtcars2)
+```{r}
+mtcars2 <- within(mtcars, {
+   vs <- factor(vs, labels = c("V", "S"))
+   am <- factor(am, labels = c("automatic", "manual"))
+   cyl  <- ordered(cyl)
+   gear <- ordered(gear)
+   carb <- ordered(carb)
+})
+summary(mtcars);
+summary(mtcars2)
+```
+Comparez les résultats obtenus. Qu’est-ce qui vous parait le plus adapté ?
+Les résultats obtenus par summary(mtcars2) semblent plus adaptés pour des statistiques car les variables qualitatives sont dénombrées selon leur qualité et les variables quantitatives discrètes sont ordonnées en fonction de leur quantité. 
+
+
+c)	Effectuer des représentations graphiques univariées des différentes colonnes du dataframe mtcars ou mtcars2  en tenant compte du type de variable concerné. Familiarisez-vous avec les fonctions boxplot(), barplot(), hist(), pie(), 
+```{r}
+
+par(mfrow=c(3,4))
+
+hist(summary(mtcars2$mpg),main = "Histogramme Miles/gallon", xlab="mpg",ylab="nombre de voitures", col= "coral2")
+
+pie(summary(mtcars2$cyl), main="Nombre de cylindres",col=rainbow(3))
+
+hist(summary(mtcars2$disp),main = "Displacement", xlab="cu.in",ylab="nombre de voitures", col= "green")
+
+boxplot((mtcars2$hp), main="Boxplot de la puissance",ylab="hp", col="aquamarine")
+
+barplot(mtcars2$drat,main = "Distribution de drat", xlab="drat", col= "gold")
+
+hist(mtcars2$wt,main = "Poids des voitures", xlab="(1000 lbs)", col= "red")
+
+barplot(mtcars2$qsec,main = "Distribution de qsec", xlab="(1/4 mile time)", col= "mediumpurple1")
+
+pie(summary(mtcars2$vs),main = "Type de moteur", col= rainbow(2))
+
+pie(summary(mtcars2$am),main = "Type de transmission", col=c("pink", "aquamarine"))
+
+pie(summary(mtcars2$carb), main="Nombre de carburateurs",col=rainbow(6))
+
+pie(summary(mtcars2$gear), main="Nombre de gear",col=c("lightgreen","lightblue","lightpink"))
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,85 @@
+# 1. PARTIE 1: Calcul de probabilités
+#### a. calcul de la probabilité qu'une variable aléatoire X suivant une loi binomiale de paramètres n=10 et p=1/3, B(10,1/3),  soit égale à 1 ?   
+```{r}
+prob <- dbinom(1, 10, 1/3); prob
+```
+
+#### b. calcul de la probabilité qu'une variable aléatoire X suivant une loi B(10,1/3) soit égale à 0,1,2,...10
+```{r}
+for (i in 0:10) {
+    print(dbinom(i, 10, 1/3))
+}
+```
+#### c. calcul de la probabilité qu'une variable aléatoire X suivant une loi B(10,1/3) soit inférieure ou égale à 0,1,2,...10  
+```{r}
+for (i in 0:10) {
+    print(pbinom(i, 10, 1/3))
+}
+```
+#### d. calcul de la probabilité qu'une variable aléatoire X suivant une loi B(10,1/3) soit supérieure à 5 
+```{r}
+p <- 1 - pbinom(5, 10, 1/3); p
+```
+#### e. calcul de la probabilité qu'une variable aléatoire X suivant une loi de Poisson P(2.5) soit égale à 0,1,2,...8 ?
+```{r}
+for (i in 0:8) {
+    print(dpois(i, 2.5))
+}
+```
+#### f. calcul de la probabilité qu'une variable aléatoire X suivant une loi de Poisson P(2.5) soit inférieure ou égale à 0,1,2,...8 
+```{r}
+for (i in 0:8) {
+    print(ppois(i, 2,5))
+}
+```
+#### g. calcul de la probabilité qu'une variable aléatoire X suivant une loi de Poisson P(2.5) soit supérieure à 20 
+```{r}
+ppois <- 1 - ppois(20, 2.5); ppois
+```
+
+# 2. PARTIE 2: Les quantiles
+#### a. calculer  la valeur x, de la loi normale centrée réduite telle que P(X<=x) = 0.97
+```{r}
+xval <- qnorm(0.97, 0, 1); xval
+```
+#### b. calcul du quantile 2% pour une loi T de student à 5 ddl 
+```{r}
+q <- qt(0.02, 5); q 
+```
+
+#### c. calcul des quantiles de la colonne taille du data frame IMC, les comparer aux quantiles théoriques obtenus pour une loi  normale
+```{r}
+tab <- read.table(file.choose(), header=TRUE, sep='\t', dec=',')
+quantile(tab$taille)
+quantile(rnorm(length(tab$taille), mean(tab$taille), sd(tab$taille)))
+
+```
+
+# 3. PARTIE 3: Catalogue de lois
+#### a. recopier le code ci-dessous, essayer de faire varier les différents paramètres de façon à bien comprendre leurs effets
+```{r}
+x=0:5;n=5;
+plot(x,dbinom(x,n,0.5),xlim=c(0,20),ylim=c(0,.40),type="h",lty=2,pch=n,cex=1,lwd=3,col=1,cex.axis=1.5,xlab="",ylab="");
+x=0:10;n=10;
+points(x,dbinom(x,n,0.5),type="h",pch=n,lty=3,cex=1,lwd=3,col=3)
+x=0:20;n=20;
+points(x,dbinom(x,n,0.5),type="h",lty=4,pch=n,cex=1,lwd=3,col=5)
+legtxt=c(expression(paste(italic(n),"=5")), expression(paste(italic(n)," =10")), expression(paste(italic(n)," =20")) )
+legend("topright",legtxt,title=expression(paste(italic(p),"=0.5")), lty=c(2,3,4),col=c(1,3,5),cex=1.5,bg="white")
+title("Loi binomiale de paramètre n et p=0.5")
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+

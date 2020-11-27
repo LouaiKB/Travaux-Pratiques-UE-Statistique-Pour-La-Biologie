@@ -1,0 +1,135 @@
+---
+title: "TP2"
+author: "Louai KB"
+date: "21/11/2020"
+output:
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+# 1. Calcul matriciel 
+#### a. le le calcul de la somme des éléments d’un vecteur, d’une matrice
+On utilise la fonction sum() pour calculer la somme d’un vecteur et d’une matrice
+```{r}
+# calcul de la somme d'un vecteur 
+vect = c(1, 2, 3, 4, 5);
+sum(vect);
+
+# calcul de la somme d'une matrice
+mat = matrix(c(1, 2, 3, 4, 5, 6), 2, 3);
+sum(mat);
+
+```
+#### b. le calcul de la somme des éléments de chacune colonnes de la matrice
+On utilise la fonction colSums()
+```{r}
+mat = matrix(c(1, 2, 3, 4, 5, 6), 2, 3);
+colSums(mat);
+```
+#### c. la valeure de M[11]
+M[11] vaut la valeure du 11ème indice linéaire du vecteur
+```{r}
+M = matrix(c(1, 5, 123, 14, 536, 46, 327, 80, 99, 104, 2036, 112), 4, 3);
+M[11];
+```
+
+# 2. Les tableaux de données (data frame) existants dans les packages R 
+#### a. lister les packages disponibles
+```{r}
+library()
+```
+
+#### b. observation de la liste des fichiers existants dans le package ‘cluster’
+```{r}
+library(cluster) 
+data()
+```
+#### c. Importation dans un tableau de donnéesle fichier airquality du package 'datasets'
+```{r}
+# première méthode
+D_methode_1 = data.frame(datasets::airquality);
+
+# deuxième méthode
+library(datasets); data("airquality")
+D_methode_2 = data.frame(airquality)
+D_methode_2
+```
+
+#### d. résumé statistique du fichier airquality
+```{r}
+summary(D_methode_1)
+```
+
+# 3. Importation et exportation de données externes
+#### a. importation du fichier sous forme de data frame et affichage du contenu 
+```{r}
+# importation de la table en utilisant la fonction read.table()
+importe_table = read.table(file.choose(), header=TRUE, sep='\t', dec=',')
+
+# importation du fichier sous forme de data.frame
+D = data.frame(importe_table)
+D
+```
+#### c. vérification des noms des colonnes puis nommage des lignes 
+```{r}
+colnames(D)
+```
+
+```{r}
+individus_nums = (paste("individus", 1:152))
+rownames(D) <- individus_nums
+D
+```
+
+#### d.  l’ajout d’une nouvelle colonne IMC à D
+```{r}
+# l'IMC = poids / (taille * 0.01) ^ 2 
+D['IMC'] = D['poids'] / (D['taille'] * 0.01)^2
+D
+```
+
+```{r}
+# Extraction de D les lignes correspondant aux enfants ayanr un IMC < 15 et un age <=3,5
+new_D = D[D['IMC'] < 15 & D['an'] <= 3.5,];
+new_D;
+```
+
+```{r}
+# le nombre des enfants vérifiant ces conditions 
+nrow(new_D);
+```
+#### e. Exportation du nouveau tableau de donnée sous forme de text
+```{r}
+write.table(new_D, file="enfants.txt", sep="\t")
+```
+
+# 4. Analyse des données
+#### a. importation du fichier 
+```{r}
+E = read.table(file.choose(), header=TRUE, sep="\t", dec=",")
+E
+```
+#### b. création de la variable PTL1
+```{r}
+PTL1 = E$PTL
+E['PTL1'] = replace(PTL1, PTL1 >= 2, 2)
+E
+```
+#### c. création de la variable FVT1 
+```{r}
+FVT1 = E$FVT
+E["FVT1"] = replace(FVT1, FVT1 >= 2, 2)
+E
+```
+#### d. Ordonner le data frame selon les poids de naissance croissant (BWT)
+```{r}
+E[order(E$BWT, decreasing = FALSE),]
+```
+#### f. extraction des individus ayant des mères noires ou blanches et qui fument 
+```{r}
+x=E[E$SMOKE == 1 & E$RACE < 3,];
+x;
+```
+
