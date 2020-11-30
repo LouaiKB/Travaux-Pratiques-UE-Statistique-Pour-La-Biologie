@@ -66,8 +66,12 @@ donc on rejete H0. Par conclusion, **Le poids des hommes est-il significativemen
 
 
 # Exercice 2 
+
 Une compagnie pharmaceutique veut savoir si le procédé de fabrication qu’elle utilise fournit effectivement des comprimés dosés à 5mg de principe actif d’un médicament.
 La quantité de principe actif est mesurée pour 100 comprimés issus d’un lot de fabrication. Le dosage moyen de principe actif est de 4,85 mg (variance estimée, 0,50).
+
+* La quantité moyenne de principe actif mesurée dans les comprimés de ce lot s’écarte-t-elle significativement du dosage prévu par le processus de fabrication ?
+
 
 
 
