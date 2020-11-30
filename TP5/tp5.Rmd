@@ -1,0 +1,73 @@
+---
+title: "TP5 Tests Statistiques avec R"
+author: "Louai KASSA BAGHDOUCHE"
+date: "30/11/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+# Exercice1 Tests
+
+* déterminer si l’agrégation plaquettaire est modifiée après avoir fumé unecigarette ? On suppose les conditions de validité du test vérifiées.
+
+```{r}
+agregation.avant <- c(25, 25, 27, 29, 30, 45, 51, 51, 57, 61, 68); agregation.avant
+agregation.apres <- c(27, 29, 37, 45, 42, 60, 55, 78, 66, 60, 89); agregation.apres
+
+# on fait le test de shapiro wilk pour voire la normalité 
+shapiro.test(agregation.avant)
+
+shapiro.test(agregation.apres)
+```
+d'après les p values obtenus on peut dire que les deux distributions suivent une loi normale 
+du coup on peut faire le test t student.
+
+```{r}
+# l'hypothèse nulle H0: on suppose que l'agrégation plaquettaire n'est pas modifié après avoir fumé une cigarette
+# l'hypothèse alternative H1: on suppose que l'agrégation plaquettaire est modifié après avoir fumé une cigarette
+# on fait un test t student bilatéral
+
+t.test(agregation.avant, agregation.apres, paired=TRUE, alternative="two.sided")
+```
+
+la p-value = **0.001794** donc p-value < 0.05 ce qui signifie qu'il y'a une différence significative.
+donc on rejete H0. Par conclusion, **l'agrégation plaquettaire est modifiée après avoir fumé une cigarette**
+
+* Le poids des hommes est-il significativement différent de celui des femmes ?
+
+```{r}
+poids.homme <- c(80.7, 85.10, 88.60, 81.70, 69.80, 79.50, 107.20, 69.30, 80.90, 63); poids.homme
+poids.femme <- c(42.10, 53.80, 30.00, 45.80, 57.70, 59.20, 82.40, 66.20, 66.90, 51.20); poids.femme
+```
+
+```{r}
+# on fait le test de shapiro pour vérifier la normalité
+shapiro.test(poids.homme)
+shapiro.test(poids.femme)
+```
+Donc les deux poids suivent une loi normale les deux p values sont supérieurs à 0.05
+```{r}
+# l'hypothèse nulle H0 on suppose que les deux poids ne sont pas différents
+# l'hypothèse alternative H1 on suppose que les deux poids sont significativement différent
+# on fait un test t student bilatéral
+
+t.test(poids.homme, poids.femme, paired=TRUE, alternative="two.sided")
+
+```
+la p-value = **0.0009534** donc p-value < 0.05 ce qui signifie qu'il y'a une différence significative.
+donc on rejete H0. Par conclusion, **Le poids des hommes est-il significativement différent de celui des femmes**
+
+
+# Exercice 2 
+Une compagnie pharmaceutique veut savoir si le procédé de fabrication qu’elle utilise fournit effectivement des comprimés dosés à 5mg de principe actif d’un médicament.
+La quantité de principe actif est mesurée pour 100 comprimés issus d’un lot de fabrication. Le dosage moyen de principe actif est de 4,85 mg (variance estimée, 0,50).
+
+
+
